@@ -1,4 +1,5 @@
-let currentLimit = 20;
+let currentLimit =
+  window.innerWidth < 768 ? 6 : 20;
 const posterGrid = document.getElementById("posterGrid");
 
 const briefData =
@@ -53,7 +54,7 @@ const filteredTemplates = templates;
   designList.forEach(function (template, index) {
     const apiImage =
       photos.length > 0
-        ? photos[index % photos.length]?.src?.large
+        ? photos[index]?.src?.medium
         : "";
 
         const dynamicStyle =
@@ -79,7 +80,10 @@ designData.font =
     const previewWidth = designData.width || 1080;
     const previewHeight = designData.height || 1080;
 
-    const previewScale = 320 / previewWidth;
+    const previewScale =
+  window.innerWidth < 768
+    ? 240 / previewWidth
+    : 320 / previewWidth;
     const wrapperHeight = previewHeight * previewScale;
 
     const card = document.createElement("div");
@@ -172,7 +176,8 @@ function downloadPreview(index) {
     link.href = canvas.toDataURL({
       format: "png",
       quality: 1,
-      multiplier: 2
+     multiplier:
+  window.innerWidth < 768 ? 1.5 : 3
     });
 
     link.click();
