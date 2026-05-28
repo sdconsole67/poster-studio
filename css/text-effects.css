@@ -1,0 +1,117 @@
+.text-style-library {
+  margin-top: 18px;
+}
+
+.text-style-library h4 {
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: #ffffff;
+}
+
+.text-style-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.text-style-card {
+  height: 70px;
+  border-radius: 16px;
+  background: #11141d;
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.text-style-card span {
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.style-gold span {
+  color: #ffd66b;
+  text-shadow: 0 2px 0 #8a5a00, 0 8px 18px rgba(255, 204, 0, 0.45);
+}
+
+.style-silver span {
+  color: #f2f2f2;
+  text-shadow: 0 2px 0 #777, 0 8px 18px rgba(255,255,255,0.35);
+}
+
+.style-neon span {
+  color: #00e5ff;
+  text-shadow: 0 0 8px #00e5ff, 0 0 18px #00e5ff;
+}
+
+.style-fire span {
+  color: #ff9f1c;
+  text-shadow: 0 2px 0 #7a2500, 0 0 20px rgba(255,80,0,0.7);
+}
+
+.style-luxury span {
+  color: #d4af37;
+  font-family: Georgia, serif;
+  text-shadow: 0 3px 0 #171717, 0 12px 22px rgba(0,0,0,0.6);
+}
+
+.style-outline span {
+  color: #ffffff;
+  -webkit-text-stroke: 1px #111;
+  text-shadow: 0 6px 18px rgba(0,0,0,0.5);
+}
+
+.style-pink span {
+  color: #ff66c4;
+  text-shadow: 0 0 12px rgba(255,102,196,0.8);
+}
+
+.style-3d span {
+  color: #ffffff;
+  text-shadow: 2px 2px 0 #111, 4px 4px 0 #333, 8px 8px 20px rgba(0,0,0,0.7);
+}
+
+.style-glossy-gold span {
+  color: #ffe08a;
+  text-shadow: 0 2px 0 #9b6500, 0 0 18px rgba(255,215,80,.7);
+}
+
+.style-royal-gold span {
+  color: #d4af37;
+  font-family: Cinzel, serif;
+  text-shadow: 0 3px 0 #3a2600, 0 12px 24px rgba(0,0,0,.7);
+}
+
+.style-chrome span {
+  color: #ffffff;
+  text-shadow: 0 2px 0 #8a8a8a, 0 0 18px rgba(255,255,255,.6);
+}
+
+.style-diamond span {
+  color: #ffffff;
+  text-shadow: 0 0 10px #ffffff, 0 0 24px rgba(0,229,255,.7);
+}
+
+.style-tech span {
+  color: #4cc9f0;
+  font-family: Orbitron, sans-serif;
+  text-shadow: 0 0 14px rgba(76,201,240,.8);
+}
+
+.style-red span {
+  color: #ff2d2d;
+  text-shadow: 0 2px 0 #4b0000, 0 0 22px rgba(255,45,45,.75);
+}
+
+.style-green span {
+  color: #00d084;
+  text-shadow: 0 0 16px rgba(0,208,132,.8);
+}
+
+.style-purple span {
+  color: #a66bff;
+  text-shadow: 0 0 18px rgba(166,107,255,.85);
+}

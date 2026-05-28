@@ -1,153 +1,535 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="bn">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Poster Editor</title>
+    <title>Poster Editor</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Anton&family=Archivo+Black&family=Bebas+Neue&family=Cinzel:wght@400;700&family=Exo+2:wght@400;700&family=Montserrat:wght@400;500;700;900&family=Noto+Sans+Bengali:wght@400;700;900&family=Orbitron:wght@400;700&family=Oswald:wght@400;700&family=Playfair+Display:wght@400;700;900&family=Poppins:wght@400;500;700;900&family=Raleway:wght@400;700;900&family=Russo+One&family=Teko:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/editor.css">
+<link rel="stylesheet" href="css/font-library.css">
+<link rel="stylesheet" href="css/text-effects.css">
+  </head>
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-J581M1V69M"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <body>
+    <div class="editor-layout">
+      <!-- LEFT TOOLBAR -->
+      <aside class="main-toolbar">
+        <button onclick="openPanel('textPanel')">✏️</button>
 
-  gtag('config', 'G-J581M1V69M');
-</script>
+        <button onclick="openPanel('assetsPanel')">🧩</button>
 
-</head>
-<body>
+        <button onclick="openPanel('imagePanel')">🖼️</button>
 
-  <div class="pro-editor">
+        <button onclick="openPanel('backgroundPanel')">🎨</button>
 
-    <aside class="editor-panel left-panel">
-      <div class="panel-title">
-        <h2>Editor</h2>
-        <p>Customize your poster</p>
-      </div>
+        <button onclick="openPanel('layersPanel')">📚</button>
+      </aside>
 
-      <div class="tool-section">
-        <h3>Text</h3>
+      <!-- FLOATING PANEL -->
+      <aside class="side-panel" id="sidePanel">
+        <button class="panel-close" onclick="closePanel()">×</button>
 
-        <label>Selected Text</label>
-        <input type="text" id="textInput" placeholder="Select text first" />
+        <div id="panelResizeHandle" class="panel-resize-handle"></div>
 
-        <label>Font Family</label>
-        <select id="fontFamilyInput">
+        <!-- TEXT -->
+        <div class="panel" id="textPanel">
+          <div class="panel-header">
+            <h3>Text</h3>
+            <button class="panel-close" onclick="closePanel()">×</button>
+          </div>
 
-  <option value="Montserrat">Montserrat</option>
-  <option value="Poppins">Poppins</option>
-  <option value="Anton">Anton</option>
-  <option value="Bebas Neue">Bebas Neue</option>
-  <option value="Oswald">Oswald</option>
+          <button class="add-btn" onclick="addText()">+ Add Text</button>
 
-  <option value="Raleway">Raleway</option>
-  <option value="Teko">Teko</option>
-  <option value="Orbitron">Orbitron</option>
-  <option value="Cinzel">Cinzel</option>
-  <option value="Playfair Display">Playfair Display</option>
+          <input type="text" id="textInput" placeholder="Edit text" />
 
-  <option value="Merriweather">Merriweather</option>
-  <option value="Lobster">Lobster</option>
-  <option value="Abril Fatface">Abril Fatface</option>
-  <option value="Bangers">Bangers</option>
-  <option value="Permanent Marker">Permanent Marker</option>
+          <div class="mini-grid">
+            <button onclick="toggleBold()">B</button>
 
-  <option value="Russo One">Russo One</option>
-  <option value="Archivo Black">Archivo Black</option>
-  <option value="Alfa Slab One">Alfa Slab One</option>
-  <option value="Fredoka">Fredoka</option>
-  <option value="DM Serif Display">DM Serif Display</option>
+            <button onclick="toggleItalic()">I</button>
 
-  <option value="Exo 2">Exo 2</option>
-  <option value="Sora">Sora</option>
-  <option value="Barlow Condensed">Barlow Condensed</option>
-  <option value="Kanit">Kanit</option>
-  <option value="Space Grotesk">Space Grotesk</option>
+            <button onclick="makeUppercase()">AA</button>
 
-  <option value="Noto Sans Bengali">Noto Sans Bengali</option>
+            <button onclick="applyTextShadow()">Shadow</button>
+          </div>
 
-</select>
+          <div class="mini-grid">
+            <button onclick="flipSelectedX()">Flip X</button>
+            <button onclick="flipSelectedY()">Flip Y</button>
+          </div>
 
-        <label>Font Size</label>
-        <input type="range" id="fontSizeInput" min="16" max="180" value="60" />
+          <button onclick="triggerTextImageFillUpload()">
+            Upload Text Texture
+          </button>
 
-        <label>Letter Spacing</label>
-        <input type="range" id="letterSpacingInput" min="-50" max="250" value="0" />
+          <input type="file" id="textTextureUpload" hidden />
 
-        <label>Text Color</label>
-        <input type="color" id="colorInput" value="#ffffff" />
+          <label>Text Opacity</label>
+          <input
+            type="range"
+            id="textOpacityInput"
+            min="0"
+            max="1"
+            step="0.05"
+            value="1"
+          />
 
-        <button onclick="updateSelectedText()">Update Text</button>
-        <button onclick="addText()">Add Text</button>
-      </div>
+          <label>Text Border Size</label>
+          <input
+            type="range"
+            id="textStrokeSizeInput"
+            min="0"
+            max="12"
+            value="0"
+          />
 
-      <div class="tool-section">
-  <h3>Background</h3>
+          <label>Border Opacity</label>
+          <input
+            type="range"
+            id="textStrokeOpacityInput"
+            min="0"
+            max="1"
+            step="0.05"
+            value="1"
+          />
 
-  <label>Upload Background Photo</label>
-  <input type="file" id="backgroundUpload" accept="image/*" />
+          <label>Text Border Color</label>
+          <input type="color" id="textStrokeColorInput" value="#000000" />
 
-  <label>Background Color</label>
-  <input type="color" id="bgColorInput" value="#05070d" />
+          <label>Text Background Color</label>
+          <input type="color" id="textBgColorInput" value="#000000" />
 
-  <label>Gradient Start</label>
-  <input type="color" id="gradientStartInput" value="#05070d" />
+          <label>Text Background Opacity</label>
+          <input
+            type="range"
+            id="textBgOpacityInput"
+            min="0"
+            max="1"
+            step="0.05"
+            value="0"
+          />
 
-  <label>Gradient End</label>
-  <input type="color" id="gradientEndInput" value="#1a1f35" />
+          <h4>Custom Gradient</h4>
 
-  <button onclick="applyBackgroundColor()">Apply Background Color</button>
-  <button onclick="applyGradientBackground()">Apply Gradient</button>
-</div>
+          <label>Gradient Color 1</label>
+          <input type="color" id="gradientColor1" value="#ffcc00" />
 
-      <div class="tool-section">
-        <h3>Arrange</h3>
+          <label>Gradient Color 2</label>
+          <input type="color" id="gradientColor2" value="#ff2d2d" />
 
-        <button onclick="bringForward()">Bring Forward</button>
-        <button onclick="sendBackward()">Send Backward</button>
-        <button onclick="deleteSelected()">Delete Selected</button>
-      </div>
-    </aside>
+          <label>Gradient Style</label>
 
-    <main class="editor-stage">
+          <select id="gradientDirection">
+            <option value="horizontal">Horizontal</option>
 
-      <div class="top-toolbar">
-        <button onclick="fitCanvas()">Fit</button>
-        <button onclick="zoomOut()">−</button>
-        <span id="zoomLabel">100%</span>
-        <button onclick="zoomIn()">+</button>
-        <button class="export-btn" onclick="downloadPoster()">Download HD</button>
-      </div>
+            <option value="vertical">Vertical</option>
 
-      <div class="stage-scroll">
-        <div class="canvas-frame">
-          <canvas id="posterCanvas"></canvas>
+            <option value="diagonal">Diagonal</option>
+
+            <option value="radial">Radial</option>
+          </select>
+
+          <button onclick="applyCustomTextGradient()">Apply Gradient</button>
+
+          <h4>Gradient Text Styles</h4>
+
+          <div id="textGradientGrid" class="text-gradient-grid"></div>
+
+          <input type="color" id="colorInput" />
+
+          <input type="range" id="fontSizeInput" min="10" max="220" />
+
+          <input type="range" id="letterSpacingInput" min="-20" max="300" />
+
+          <div id="fontGrid" class="font-grid"></div>
+
+          <div id="textStyleGrid" class="text-style-grid"></div>
         </div>
-      </div>
 
-    </main>
+        <!-- ASSETS -->
+        <div class="panel" id="assetsPanel">
+          <div class="asset-section">
+            <h4>Shapes</h4>
 
-    <aside class="editor-panel right-panel">
-      <div class="panel-title">
-        <h2>Layers</h2>
-        <p>Select and manage objects</p>
-      </div>
+            <div class="asset-grid">
+              <button onclick="addShape('circle')">Circle</button>
+              <button onclick="addShape('rect')">Box</button>
+              <button onclick="addShape('roundRect')">Round Box</button>
+              <button onclick="addShape('line')">Line</button>
+              <button onclick="addShape('triangle')">Triangle</button>
+              <button onclick="addShape('star')">Star</button>
+              <button onclick="addShape('diamond')">Diamond</button>
+              <button onclick="addShape('pill')">Pill</button>
+            </div>
+          </div>
+          <div class="asset-section">
+            <h4>Badges</h4>
 
-      <div id="layerList" class="layer-list"></div>
-    </aside>
+            <div class="asset-section">
+              <h4>Offer Badges</h4>
 
-  </div>
+              <div id="badgeGrid" class="badge-grid"></div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+              <div class="badge-grid">
+                <div
+                  class="badge-card badge-gold"
+                  onclick="addBadgeStyle('gold')"
+                >
+                  50% OFF
+                </div>
 
-  <script src="js/layouts.js"></script>
-  <script src="js/renderPoster.js"></script>
-  <script src="js/editor.js"></script>
+                <div
+                  class="badge-card badge-red"
+                  onclick="addBadgeStyle('red')"
+                >
+                  SALE
+                </div>
 
-</body>
+                <div
+                  class="badge-card badge-neon"
+                  onclick="addBadgeStyle('neon')"
+                >
+                  NEW
+                </div>
+
+                <div
+                  class="badge-card badge-glass"
+                  onclick="addBadgeStyle('glass')"
+                >
+                  FREE
+                </div>
+
+                <div
+                  class="badge-card badge-black"
+                  onclick="addBadgeStyle('black')"
+                >
+                  LIMITED
+                </div>
+
+                <div
+                  class="badge-card badge-pink"
+                  onclick="addBadgeStyle('pink')"
+                >
+                  OFFER
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- IMAGE -->
+        <div class="panel" id="imagePanel">
+          <div class="panel-header">
+            <h3>Images</h3>
+          </div>
+
+          <button onclick="triggerImageUpload()">Upload Image</button>
+
+          <button onclick="triggerLogoUpload()">Upload Logo</button>
+
+          <div class="image-filter-library">
+            <h4>Image Styles</h4>
+            <div id="imageFilterGrid" class="image-filter-grid"></div>
+          </div>
+
+          <label>Image Opacity</label>
+          <input
+            type="range"
+            id="imageOpacityInput"
+            min="0"
+            max="1"
+            step="0.05"
+            value="1"
+          />
+
+          <div class="mini-grid">
+            <button onclick="flipSelectedX()">Flip X</button>
+            <button onclick="flipSelectedY()">Flip Y</button>
+          </div>
+
+          <h4>Image Effects</h4>
+
+          <label>Shadow Blur</label>
+          <input
+            type="range"
+            id="imageShadowBlur"
+            min="0"
+            max="100"
+            value="25"
+          />
+
+          <label>Shadow X Position</label>
+          <input type="range" id="imageShadowX" min="-60" max="60" value="0" />
+
+          <label>Shadow Y Position</label>
+          <input type="range" id="imageShadowY" min="-60" max="60" value="12" />
+
+          <label>Shadow Color</label>
+          <input type="color" id="imageShadowColor" value="#000000" />
+
+          <button onclick="removeImageEffects()">Reset Image</button>
+        </div>
+
+        <!-- BG -->
+        <div class="panel" id="backgroundPanel">
+          <div class="panel-header">
+            <h3>Background</h3>
+          </div>
+
+          <input type="color" id="bgColorInput" />
+
+          <button onclick="applyBackgroundColor()">Apply Color</button>
+
+          <button onclick="triggerBgUpload()">Upload BG</button>
+
+          <h4>Background Gradient</h4>
+
+          <label>BG Gradient Color 1</label>
+          <input type="color" id="bgGradientColor1" value="#111111" />
+
+          <label>BG Gradient Color 2</label>
+          <input type="color" id="bgGradientColor2" value="#2f6bff" />
+
+          <label>BG Gradient Style</label>
+
+          <select id="bgGradientDirection">
+            <option value="horizontal">Horizontal</option>
+
+            <option value="vertical">Vertical</option>
+
+            <option value="diagonal">Diagonal</option>
+
+            <option value="radial">Radial</option>
+          </select>
+
+          <button onclick="applyCustomBackgroundGradient()">
+            Apply Background Gradient
+          </button>
+        </div>
+
+        <!-- LAYERS -->
+        <div class="panel" id="layersPanel">
+          <div class="panel-header">
+            <h3>Layers</h3>
+          </div>
+
+          <div id="layerList"></div>
+        </div>
+
+        <!-- Project panal -->
+
+        <div class="panel" id="projectsPanel">
+          <div class="panel-header">
+            <h3>Projects</h3>
+            <button class="panel-close" onclick="closePanel()">×</button>
+          </div>
+
+          <div id="projectsList"></div>
+        </div>
+
+        <!-- style panel -->
+        <div class="panel" id="stylePanel">
+          <div class="panel-header">
+            <h3>Style</h3>
+            <button class="panel-close" onclick="closePanel()">×</button>
+          </div>
+
+          <label>Corner Radius</label>
+          <input
+            type="range"
+            id="objectRadiusInput"
+            min="0"
+            max="200"
+            value="0"
+          />
+
+          <label>Fill / Main Color</label>
+          <input type="color" id="objectFillColor" value="#ffffff" />
+
+          <label>Opacity / Transparency</label>
+          <label>Fill Opacity</label>
+          <input
+            type="range"
+            id="objectFillOpacity"
+            min="0"
+            max="1"
+            step="0.05"
+            value="1"
+          />
+
+          <label>Border Opacity</label>
+          <input
+            type="range"
+            id="objectBorderOpacity"
+            min="0"
+            max="1"
+            step="0.05"
+            value="1"
+          />
+
+          <label>Text Opacity</label>
+          <input
+            type="range"
+            id="badgeTextOpacityInput"
+            min="0"
+            max="1"
+            step="0.05"
+            value="1"
+          />
+
+          <label>Border Size</label>
+          <input
+            type="range"
+            id="objectBorderSize"
+            min="0"
+            max="40"
+            value="0"
+          />
+
+          <label>Border Color</label>
+          <input type="color" id="objectBorderColor" value="#ffffff" />
+
+          <label>Shadow Blur</label>
+          <input
+            type="range"
+            id="objectShadowBlur"
+            min="0"
+            max="100"
+            value="0"
+          />
+
+          <label>Shadow X</label>
+          <input type="range" id="objectShadowX" min="-60" max="60" value="0" />
+
+          <label>Shadow Y</label>
+          <input type="range" id="objectShadowY" min="-60" max="60" value="0" />
+
+          <label>Shadow Color</label>
+          <input type="color" id="objectShadowColor" value="#000000" />
+
+          <button onclick="removeObjectStyle()">Reset Style</button>
+
+          <div class="badge-edit-box">
+            <label>Badge Text</label>
+            <input
+              type="text"
+              id="badgeTextInput"
+              placeholder="SALE / OFFER / 50% OFF"
+            />
+
+            <label>Badge Text Color</label>
+            <input type="color" id="badgeTextColorInput" value="#ffffff" />
+
+            <label>Badge Text Size</label>
+            <input
+              type="range"
+              id="badgeTextSizeInput"
+              min="12"
+              max="80"
+              value="34"
+            />
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN -->
+      <main class="editor-main">
+        <!-- TOPBAR -->
+        <header class="editor-topbar">
+          <div class="top-left">
+            <select id="sizePreset">
+              <option value="instagram">Instagram</option>
+
+              <option value="facebook">Facebook</option>
+
+              <option value="flyer">Flyer</option>
+
+              <option value="banner">Banner</option>
+
+              <option value="thumbnail">Thumbnail</option>
+
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+
+          <button onclick="newProject()">New Project</button>
+          <button onclick="saveCurrentProject()">Save Project</button>
+          <button onclick="openProjectsPanel()">Projects</button>
+
+          <div class="top-center">
+            <button onclick="zoomOut()">−</button>
+
+            <span id="zoomLabel">55%</span>
+
+            <button onclick="zoomIn()">+</button>
+          </div>
+
+          <div class="top-right">
+            <button onclick="downloadPoster()">Download</button>
+          </div>
+        </header>
+
+        <!-- CANVAS -->
+        <section class="canvas-area">
+          <div class="canvas-scroll">
+            <div class="canvas-holder">
+              <canvas id="posterCanvas"></canvas>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- MOBILE NAV -->
+    <nav class="mobile-editor-nav">
+      <button onclick="openPanel('textPanel')">✏️</button>
+
+      <button onclick="openPanel('assetsPanel')">🧩</button>
+
+      <button onclick="openPanel('imagePanel')">🖼️</button>
+
+      <button onclick="openPanel('backgroundPanel')">🎨</button>
+
+      <button onclick="openPanel('layersPanel')">📚</button>
+    </nav>
+
+    <input type="file" id="imageUpload" hidden />
+    <input type="file" id="logoUpload" hidden />
+    <input type="file" id="backgroundUpload" hidden />
+
+    <div id="objectMiniToolbar" class="object-mini-toolbar">
+      <button class="tool-pill" onclick="openSelectedObjectEditor()">
+        ✏️ Edit
+      </button>
+
+      <button class="tool-icon" onclick="duplicateSelected()">⧉</button>
+
+      <button class="tool-icon" onclick="deleteSelected()">🗑</button>
+
+      <button class="tool-icon" onclick="toggleMoreMenu()">⋯</button>
+    </div>
+
+    <div id="moreMenu" class="more-menu">
+      <button onclick="bringForwardObject()">Bring Forward</button>
+      <button onclick="sendBackwardObject()">Send Backward</button>
+      <button onclick="lockSelected()">Lock</button>
+      <button onclick="unlockSelected()">Unlock</button>
+    </div>
+
+    <div id="moreMenu" class="more-menu">
+      <button onclick="bringForwardObject()">Bring Front</button>
+
+      <button onclick="sendBackwardObject()">Send Back</button>
+
+      <button onclick="lockSelected()">Lock</button>
+
+      <button onclick="unlockSelected()">Unlock</button>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+<script src="js/fontLibrary.js"></script>
+<script src="js/textEffects.js"></script>
+<script src="js/badgeLibrary.js"></script>
+<script src="js/editor.js"></script>
+  </body>
 </html>

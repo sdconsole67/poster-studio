@@ -1,0 +1,23 @@
+.badge-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.badge-card{
+  min-height:58px;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  font-size:13px;
+  cursor:pointer;
+  border:1px solid rgba(255,255,255,.12);
+  text-align:center;
+  padding:8px;
+}
+
+.badge-card:hover{
+  transform:scale(1.03);
+}

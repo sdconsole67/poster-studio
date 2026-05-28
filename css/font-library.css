@@ -1,0 +1,68 @@
+.font-library {
+
+  margin-top: 22px;
+
+}
+
+.font-library h4 {
+
+  margin-bottom: 12px;
+
+  font-size: 14px;
+
+}
+
+.font-grid {
+
+  display: grid;
+
+  grid-template-columns: 1fr;
+
+  gap: 10px;
+
+}
+
+.font-card {
+
+  height: 62px;
+
+  border-radius: 16px;
+
+  background: #171b26;
+
+  border:
+    1px solid
+    rgba(255,255,255,0.08);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+
+  overflow: hidden;
+
+}
+
+.font-card:hover {
+
+  transform: scale(1.02);
+
+  border-color:
+    rgba(255,255,255,0.2);
+
+}
+
+.font-card span {
+
+  font-size: 26px;
+
+  font-weight: 900;
+
+  letter-spacing: 1px;
+
+}
