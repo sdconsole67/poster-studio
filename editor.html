@@ -1,535 +1,790 @@
-<!doctype html>
-<html lang="bn">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>Poster Editor</title>
-
-    <link rel="stylesheet" href="css/fonts.css">
-<link rel="stylesheet" href="css/editor.css">
-<link rel="stylesheet" href="css/font-library.css">
-<link rel="stylesheet" href="css/text-effects.css">
-  </head>
-
-  <body>
-    <div class="editor-layout">
-      <!-- LEFT TOOLBAR -->
-      <aside class="main-toolbar">
-        <button onclick="openPanel('textPanel')">✏️</button>
-
-        <button onclick="openPanel('assetsPanel')">🧩</button>
-
-        <button onclick="openPanel('imagePanel')">🖼️</button>
-
-        <button onclick="openPanel('backgroundPanel')">🎨</button>
-
-        <button onclick="openPanel('layersPanel')">📚</button>
-      </aside>
-
-      <!-- FLOATING PANEL -->
-      <aside class="side-panel" id="sidePanel">
-        <button class="panel-close" onclick="closePanel()">×</button>
-
-        <div id="panelResizeHandle" class="panel-resize-handle"></div>
-
-        <!-- TEXT -->
-        <div class="panel" id="textPanel">
-          <div class="panel-header">
-            <h3>Text</h3>
-            <button class="panel-close" onclick="closePanel()">×</button>
-          </div>
-
-          <button class="add-btn" onclick="addText()">+ Add Text</button>
-
-          <input type="text" id="textInput" placeholder="Edit text" />
-
-          <div class="mini-grid">
-            <button onclick="toggleBold()">B</button>
-
-            <button onclick="toggleItalic()">I</button>
-
-            <button onclick="makeUppercase()">AA</button>
-
-            <button onclick="applyTextShadow()">Shadow</button>
-          </div>
-
-          <div class="mini-grid">
-            <button onclick="flipSelectedX()">Flip X</button>
-            <button onclick="flipSelectedY()">Flip Y</button>
-          </div>
-
-          <button onclick="triggerTextImageFillUpload()">
-            Upload Text Texture
-          </button>
-
-          <input type="file" id="textTextureUpload" hidden />
-
-          <label>Text Opacity</label>
-          <input
-            type="range"
-            id="textOpacityInput"
-            min="0"
-            max="1"
-            step="0.05"
-            value="1"
-          />
-
-          <label>Text Border Size</label>
-          <input
-            type="range"
-            id="textStrokeSizeInput"
-            min="0"
-            max="12"
-            value="0"
-          />
-
-          <label>Border Opacity</label>
-          <input
-            type="range"
-            id="textStrokeOpacityInput"
-            min="0"
-            max="1"
-            step="0.05"
-            value="1"
-          />
-
-          <label>Text Border Color</label>
-          <input type="color" id="textStrokeColorInput" value="#000000" />
-
-          <label>Text Background Color</label>
-          <input type="color" id="textBgColorInput" value="#000000" />
-
-          <label>Text Background Opacity</label>
-          <input
-            type="range"
-            id="textBgOpacityInput"
-            min="0"
-            max="1"
-            step="0.05"
-            value="0"
-          />
-
-          <h4>Custom Gradient</h4>
-
-          <label>Gradient Color 1</label>
-          <input type="color" id="gradientColor1" value="#ffcc00" />
-
-          <label>Gradient Color 2</label>
-          <input type="color" id="gradientColor2" value="#ff2d2d" />
-
-          <label>Gradient Style</label>
-
-          <select id="gradientDirection">
-            <option value="horizontal">Horizontal</option>
-
-            <option value="vertical">Vertical</option>
-
-            <option value="diagonal">Diagonal</option>
-
-            <option value="radial">Radial</option>
-          </select>
-
-          <button onclick="applyCustomTextGradient()">Apply Gradient</button>
-
-          <h4>Gradient Text Styles</h4>
-
-          <div id="textGradientGrid" class="text-gradient-grid"></div>
-
-          <input type="color" id="colorInput" />
-
-          <input type="range" id="fontSizeInput" min="10" max="220" />
-
-          <input type="range" id="letterSpacingInput" min="-20" max="300" />
-
-          <div id="fontGrid" class="font-grid"></div>
-
-          <div id="textStyleGrid" class="text-style-grid"></div>
-        </div>
-
-        <!-- ASSETS -->
-        <div class="panel" id="assetsPanel">
-          <div class="asset-section">
-            <h4>Shapes</h4>
-
-            <div class="asset-grid">
-              <button onclick="addShape('circle')">Circle</button>
-              <button onclick="addShape('rect')">Box</button>
-              <button onclick="addShape('roundRect')">Round Box</button>
-              <button onclick="addShape('line')">Line</button>
-              <button onclick="addShape('triangle')">Triangle</button>
-              <button onclick="addShape('star')">Star</button>
-              <button onclick="addShape('diamond')">Diamond</button>
-              <button onclick="addShape('pill')">Pill</button>
-            </div>
-          </div>
-          <div class="asset-section">
-            <h4>Badges</h4>
-
-            <div class="asset-section">
-              <h4>Offer Badges</h4>
-
-              <div id="badgeGrid" class="badge-grid"></div>
-
-              <div class="badge-grid">
-                <div
-                  class="badge-card badge-gold"
-                  onclick="addBadgeStyle('gold')"
-                >
-                  50% OFF
-                </div>
-
-                <div
-                  class="badge-card badge-red"
-                  onclick="addBadgeStyle('red')"
-                >
-                  SALE
-                </div>
-
-                <div
-                  class="badge-card badge-neon"
-                  onclick="addBadgeStyle('neon')"
-                >
-                  NEW
-                </div>
-
-                <div
-                  class="badge-card badge-glass"
-                  onclick="addBadgeStyle('glass')"
-                >
-                  FREE
-                </div>
-
-                <div
-                  class="badge-card badge-black"
-                  onclick="addBadgeStyle('black')"
-                >
-                  LIMITED
-                </div>
-
-                <div
-                  class="badge-card badge-pink"
-                  onclick="addBadgeStyle('pink')"
-                >
-                  OFFER
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- IMAGE -->
-        <div class="panel" id="imagePanel">
-          <div class="panel-header">
-            <h3>Images</h3>
-          </div>
-
-          <button onclick="triggerImageUpload()">Upload Image</button>
-
-          <button onclick="triggerLogoUpload()">Upload Logo</button>
-
-          <div class="image-filter-library">
-            <h4>Image Styles</h4>
-            <div id="imageFilterGrid" class="image-filter-grid"></div>
-          </div>
-
-          <label>Image Opacity</label>
-          <input
-            type="range"
-            id="imageOpacityInput"
-            min="0"
-            max="1"
-            step="0.05"
-            value="1"
-          />
-
-          <div class="mini-grid">
-            <button onclick="flipSelectedX()">Flip X</button>
-            <button onclick="flipSelectedY()">Flip Y</button>
-          </div>
-
-          <h4>Image Effects</h4>
-
-          <label>Shadow Blur</label>
-          <input
-            type="range"
-            id="imageShadowBlur"
-            min="0"
-            max="100"
-            value="25"
-          />
-
-          <label>Shadow X Position</label>
-          <input type="range" id="imageShadowX" min="-60" max="60" value="0" />
-
-          <label>Shadow Y Position</label>
-          <input type="range" id="imageShadowY" min="-60" max="60" value="12" />
-
-          <label>Shadow Color</label>
-          <input type="color" id="imageShadowColor" value="#000000" />
-
-          <button onclick="removeImageEffects()">Reset Image</button>
-        </div>
-
-        <!-- BG -->
-        <div class="panel" id="backgroundPanel">
-          <div class="panel-header">
-            <h3>Background</h3>
-          </div>
-
-          <input type="color" id="bgColorInput" />
-
-          <button onclick="applyBackgroundColor()">Apply Color</button>
-
-          <button onclick="triggerBgUpload()">Upload BG</button>
-
-          <h4>Background Gradient</h4>
-
-          <label>BG Gradient Color 1</label>
-          <input type="color" id="bgGradientColor1" value="#111111" />
-
-          <label>BG Gradient Color 2</label>
-          <input type="color" id="bgGradientColor2" value="#2f6bff" />
-
-          <label>BG Gradient Style</label>
-
-          <select id="bgGradientDirection">
-            <option value="horizontal">Horizontal</option>
-
-            <option value="vertical">Vertical</option>
-
-            <option value="diagonal">Diagonal</option>
-
-            <option value="radial">Radial</option>
-          </select>
-
-          <button onclick="applyCustomBackgroundGradient()">
-            Apply Background Gradient
-          </button>
-        </div>
-
-        <!-- LAYERS -->
-        <div class="panel" id="layersPanel">
-          <div class="panel-header">
-            <h3>Layers</h3>
-          </div>
-
-          <div id="layerList"></div>
-        </div>
-
-        <!-- Project panal -->
-
-        <div class="panel" id="projectsPanel">
-          <div class="panel-header">
-            <h3>Projects</h3>
-            <button class="panel-close" onclick="closePanel()">×</button>
-          </div>
-
-          <div id="projectsList"></div>
-        </div>
-
-        <!-- style panel -->
-        <div class="panel" id="stylePanel">
-          <div class="panel-header">
-            <h3>Style</h3>
-            <button class="panel-close" onclick="closePanel()">×</button>
-          </div>
-
-          <label>Corner Radius</label>
-          <input
-            type="range"
-            id="objectRadiusInput"
-            min="0"
-            max="200"
-            value="0"
-          />
-
-          <label>Fill / Main Color</label>
-          <input type="color" id="objectFillColor" value="#ffffff" />
-
-          <label>Opacity / Transparency</label>
-          <label>Fill Opacity</label>
-          <input
-            type="range"
-            id="objectFillOpacity"
-            min="0"
-            max="1"
-            step="0.05"
-            value="1"
-          />
-
-          <label>Border Opacity</label>
-          <input
-            type="range"
-            id="objectBorderOpacity"
-            min="0"
-            max="1"
-            step="0.05"
-            value="1"
-          />
-
-          <label>Text Opacity</label>
-          <input
-            type="range"
-            id="badgeTextOpacityInput"
-            min="0"
-            max="1"
-            step="0.05"
-            value="1"
-          />
-
-          <label>Border Size</label>
-          <input
-            type="range"
-            id="objectBorderSize"
-            min="0"
-            max="40"
-            value="0"
-          />
-
-          <label>Border Color</label>
-          <input type="color" id="objectBorderColor" value="#ffffff" />
-
-          <label>Shadow Blur</label>
-          <input
-            type="range"
-            id="objectShadowBlur"
-            min="0"
-            max="100"
-            value="0"
-          />
-
-          <label>Shadow X</label>
-          <input type="range" id="objectShadowX" min="-60" max="60" value="0" />
-
-          <label>Shadow Y</label>
-          <input type="range" id="objectShadowY" min="-60" max="60" value="0" />
-
-          <label>Shadow Color</label>
-          <input type="color" id="objectShadowColor" value="#000000" />
-
-          <button onclick="removeObjectStyle()">Reset Style</button>
-
-          <div class="badge-edit-box">
-            <label>Badge Text</label>
-            <input
-              type="text"
-              id="badgeTextInput"
-              placeholder="SALE / OFFER / 50% OFF"
-            />
-
-            <label>Badge Text Color</label>
-            <input type="color" id="badgeTextColorInput" value="#ffffff" />
-
-            <label>Badge Text Size</label>
-            <input
-              type="range"
-              id="badgeTextSizeInput"
-              min="12"
-              max="80"
-              value="34"
-            />
-          </div>
-        </div>
-      </aside>
-
-      <!-- MAIN -->
-      <main class="editor-main">
-        <!-- TOPBAR -->
-        <header class="editor-topbar">
-          <div class="top-left">
-            <select id="sizePreset">
-              <option value="instagram">Instagram</option>
-
-              <option value="facebook">Facebook</option>
-
-              <option value="flyer">Flyer</option>
-
-              <option value="banner">Banner</option>
-
-              <option value="thumbnail">Thumbnail</option>
-
-              <option value="custom">Custom</option>
-            </select>
-          </div>
-
-          <button onclick="newProject()">New Project</button>
-          <button onclick="saveCurrentProject()">Save Project</button>
-          <button onclick="openProjectsPanel()">Projects</button>
-
-          <div class="top-center">
-            <button onclick="zoomOut()">−</button>
-
-            <span id="zoomLabel">55%</span>
-
-            <button onclick="zoomIn()">+</button>
-          </div>
-
-          <div class="top-right">
-            <button onclick="downloadPoster()">Download</button>
-          </div>
-        </header>
-
-        <!-- CANVAS -->
-        <section class="canvas-area">
-          <div class="canvas-scroll">
-            <div class="canvas-holder">
-              <canvas id="posterCanvas"></canvas>
-            </div>
-          </div>
-        </section>
-      </main>
-    </div>
-
-    <!-- MOBILE NAV -->
-    <nav class="mobile-editor-nav">
-      <button onclick="openPanel('textPanel')">✏️</button>
-
-      <button onclick="openPanel('assetsPanel')">🧩</button>
-
-      <button onclick="openPanel('imagePanel')">🖼️</button>
-
-      <button onclick="openPanel('backgroundPanel')">🎨</button>
-
-      <button onclick="openPanel('layersPanel')">📚</button>
-    </nav>
-
-    <input type="file" id="imageUpload" hidden />
-    <input type="file" id="logoUpload" hidden />
-    <input type="file" id="backgroundUpload" hidden />
-
-    <div id="objectMiniToolbar" class="object-mini-toolbar">
-      <button class="tool-pill" onclick="openSelectedObjectEditor()">
-        ✏️ Edit
-      </button>
-
-      <button class="tool-icon" onclick="duplicateSelected()">⧉</button>
-
-      <button class="tool-icon" onclick="deleteSelected()">🗑</button>
-
-      <button class="tool-icon" onclick="toggleMoreMenu()">⋯</button>
-    </div>
-
-    <div id="moreMenu" class="more-menu">
-      <button onclick="bringForwardObject()">Bring Forward</button>
-      <button onclick="sendBackwardObject()">Send Backward</button>
-      <button onclick="lockSelected()">Lock</button>
-      <button onclick="unlockSelected()">Unlock</button>
-    </div>
-
-    <div id="moreMenu" class="more-menu">
-      <button onclick="bringForwardObject()">Bring Front</button>
-
-      <button onclick="sendBackwardObject()">Send Back</button>
-
-      <button onclick="lockSelected()">Lock</button>
-
-      <button onclick="unlockSelected()">Unlock</button>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Poster Maker Pro | Premium Graphic Design Studio</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
-<script src="js/fontLibrary.js"></script>
-<script src="js/textEffects.js"></script>
-<script src="js/badgeLibrary.js"></script>
-<script src="js/editor.js"></script>
-  </body>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0f; color: #fff; overflow: hidden; height: 100vh; }
+        .app { display: flex; flex-direction: column; height: 100vh; }
+        
+        .top-bar { background: rgba(10,10,15,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); padding: 0.8rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; z-index: 100; }
+        .logo { font-weight: 800; font-size: 1.5rem; background: linear-gradient(135deg, #667eea, #764ba2, #f093fb); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .top-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+        .btn { background: rgba(30,30,40,0.9); border: 1px solid rgba(255,255,255,0.1); padding: 0.6rem 1.2rem; border-radius: 12px; color: #fff; cursor: pointer; font-weight: 500; transition: all 0.2s; font-size: 0.85rem; }
+        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); border: none; }
+        .btn-primary:hover { transform: translateY(-2px); }
+        .btn:hover { background: rgba(50,50,65,0.9); transform: translateY(-1px); }
+        
+        .main-layout { display: flex; flex: 1; overflow: hidden; }
+        .left-sidebar { width: 90px; background: rgba(10,10,15,0.9); backdrop-filter: blur(20px); border-right: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; align-items: center; padding: 2rem 0; gap: 1.5rem; z-index: 20; overflow-y: auto; }
+        .tool-item { width: 60px; height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 18px; cursor: pointer; transition: all 0.2s; gap: 6px; font-size: 0.7rem; color: #9ca3af; }
+        .tool-item i { font-size: 1.5rem; }
+        .tool-item.active, .tool-item:hover { background: linear-gradient(135deg, rgba(102,126,234,0.2), rgba(118,75,162,0.2)); color: #a78bfa; transform: scale(1.05); }
+        
+        .properties-panel { width: 380px; background: rgba(10,10,15,0.95); backdrop-filter: blur(20px); border-left: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; overflow-y: auto; padding: 1.5rem; transition: 0.3s; }
+        .panel-section { margin-bottom: 1.8rem; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 1.2rem; }
+        .panel-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem; color: #9ca3af; font-weight: 600; }
+        
+        .canvas-container { flex: 1; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle at 30% 40%, #13131a, #0a0a0f); overflow: auto; }
+        #canvas { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8); border-radius: 12px; cursor: crosshair; }
+        
+        .floating-toolbar { position: fixed; background: rgba(20,20,28,0.98); backdrop-filter: blur(30px); border-radius: 60px; padding: 0.7rem 1.5rem; display: flex; gap: 1rem; box-shadow: 0 15px 40px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.12); z-index: 1000; }
+        .floating-toolbar button { background: transparent; border: none; color: #fff; font-size: 1rem; cursor: pointer; padding: 8px; border-radius: 12px; transition: all 0.2s; }
+        .floating-toolbar button:hover { background: rgba(102,126,234,0.4); transform: scale(1.1); }
+        
+        .control-group { margin-bottom: 1rem; }
+        .control-label { font-size: 0.75rem; margin-bottom: 0.5rem; color: #d1d5db; display: block; }
+        input, select { background: rgba(30,30,40,0.9); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.7rem; border-radius: 12px; width: 100%; font-size: 0.85rem; }
+        input:focus, select:focus { outline: none; border-color: #667eea; }
+        input[type="color"] { height: 45px; cursor: pointer; }
+        input[type="range"] { width: 100%; cursor: pointer; height: 6px; -webkit-appearance: none; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #667eea; cursor: pointer; }
+        
+        .preset-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+        .preset-item { background: rgba(42,42,53,0.6); padding: 0.5rem 1rem; border-radius: 30px; font-size: 0.7rem; cursor: pointer; transition: all 0.2s; }
+        .preset-item:hover { background: #667eea; transform: scale(1.02); }
+        
+        .layer-item { padding: 10px; margin: 6px 0; background: rgba(42,42,53,0.4); border-radius: 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .layer-item:hover { background: rgba(102,126,234,0.2); }
+        .layer-item.active { background: rgba(102,126,234,0.3); border-left: 3px solid #667eea; }
+        
+        .toast { position: fixed; bottom: 30px; right: 30px; background: rgba(20,20,28,0.98); backdrop-filter: blur(20px); padding: 12px 24px; border-radius: 50px; border-left: 4px solid #667eea; z-index: 10000; animation: slideInRight 0.3s ease; font-size: 0.85rem; }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        
+        .auto-save-indicator { position: fixed; bottom: 20px; left: 20px; background: rgba(30,30,40,0.9); backdrop-filter: blur(10px); padding: 6px 12px; border-radius: 20px; font-size: 0.7rem; color: #10b981; z-index: 1000; }
+        
+        @media (max-width: 768px) { .left-sidebar { display: none; } .properties-panel { display: none; position: fixed; right: 0; top: 60px; height: calc(100% - 120px); width: 280px; z-index: 200; border-radius: 20px 0 0 0; } .properties-panel.open { display: flex; } .mobile-nav { display: flex; position: fixed; bottom: 0; left: 0; right: 0; background: rgba(10,10,15,0.98); padding: 12px; justify-content: space-around; z-index: 200; } .mobile-nav i { font-size: 1.3rem; padding: 10px; border-radius: 12px; cursor: pointer; color: #9ca3af; } }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1a1a24; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 10px; }
+    </style>
+</head>
+<body>
+<div class="app">
+    <div class="top-bar">
+        <div class="logo">POSTER MAKER PRO</div>
+        <div class="top-actions">
+            <button id="newBtn" class="btn"><i class="fas fa-plus"></i> New</button>
+            <button id="saveBtn" class="btn"><i class="fas fa-save"></i> Save</button>
+            <button id="exportPngBtn" class="btn btn-primary"><i class="fas fa-download"></i> Export PNG</button>
+        </div>
+    </div>
+    <div class="main-layout">
+        <div class="left-sidebar">
+            <div class="tool-item" data-tool="size"><i class="fas fa-expand-alt"></i><span>Size</span></div>
+            <div class="tool-item" data-tool="text"><i class="fas fa-font"></i><span>Text</span></div>
+            <div class="tool-item" data-tool="image"><i class="fas fa-image"></i><span>Image</span></div>
+            <div class="tool-item" data-tool="shape"><i class="fas fa-shapes"></i><span>Shape</span></div>
+            <div class="tool-item" data-tool="badge"><i class="fas fa-tag"></i><span>Badge</span></div>
+            <div class="tool-item" data-tool="shadow"><i class="fas fa-moon"></i><span>Shadow</span></div>
+            <div class="tool-item" data-tool="layers"><i class="fas fa-layer-group"></i><span>Layers</span></div>
+        </div>
+        <div class="canvas-container"><canvas id="canvas" width="1000" height="800"></canvas></div>
+        <div class="properties-panel" id="propertiesPanel"><div id="panelContent">Select a tool from the sidebar</div></div>
+    </div>
+    <div class="mobile-nav" style="display:none">
+        <i class="fas fa-font" data-tool="text"></i><i class="fas fa-image" data-tool="image"></i>
+        <i class="fas fa-shapes" data-tool="shape"></i><i class="fas fa-tag" data-tool="badge"></i>
+        <i class="fas fa-layer-group" data-tool="layers"></i>
+    </div>
+</div>
+<div class="auto-save-indicator" id="autoSaveIndicator"><i class="fas fa-cloud-upload-alt"></i> Auto-saving</div>
+
+<script>
+    // ==================== GLOBAL STATE ====================
+    let canvas = null;
+    let floatingBar = null;
+    let autoSaveTimer = null;
+
+    // Size Presets
+    const sizePresets = {
+        'Instagram Post': { w: 1080, h: 1080 },
+        'Instagram Story': { w: 1080, h: 1920 },
+        'Facebook Post': { w: 1200, h: 630 },
+        'YouTube Thumbnail': { w: 1280, h: 720 },
+        'A4 Portrait': { w: 2480, h: 3508 },
+        'Banner': { w: 1600, h: 600 }
+    };
+
+    // Badge Library
+    const badgeLibrary = [
+        { text: 'SALE', color: '#fff', bg: '#ef4444' }, { text: '50% OFF', color: '#fff', bg: '#f97316' },
+        { text: 'NEW', color: '#fff', bg: '#10b981' }, { text: 'HOT', color: '#fff', bg: '#f43f5e' },
+        { text: '20% OFF', color: '#fff', bg: '#ec4899' }, { text: 'BUY NOW', color: '#fff', bg: '#3b82f6' },
+        { text: 'LIMITED', color: '#fff', bg: '#6366f1' }, { text: 'BEST SELLER', color: '#000', bg: '#fbbf24' },
+        { text: 'FLASH SALE', color: '#fff', bg: '#06b6d4' }, { text: 'PREMIUM', color: '#fff', bg: '#7c3aed' }
+    ];
+
+    // Fonts
+    const fonts = ['Inter', 'Poppins', 'Montserrat', 'Playfair Display', 'Oswald', 'Roboto', 'Lato', 'Bebas Neue', 'Pacifico'];
+
+    // ==================== UTILITIES ====================
+    function showToast(msg, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-info-circle'}"></i> ${msg}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+    }
+
+    function updateActiveObject(property, value) {
+        const obj = canvas.getActiveObject();
+        if (obj) {
+            obj.set(property, value);
+            canvas.renderAll();
+            autoSave();
+        }
+    }
+
+    function autoSave() {
+        const data = { canvasJSON: canvas.toJSON(), width: canvas.width, height: canvas.height, timestamp: Date.now() };
+        localStorage.setItem('poster_maker_auto', JSON.stringify(data));
+        const indicator = document.getElementById('autoSaveIndicator');
+        indicator.style.opacity = '1';
+        setTimeout(() => { if(indicator) indicator.style.opacity = '0.5'; }, 1000);
+    }
+
+    // ==================== CANVAS INIT ====================
+    function initCanvas(w, h) {
+        if (canvas) canvas.dispose();
+        canvas = new fabric.Canvas('canvas', { preserveObjectStacking: true, enableRetinaScaling: true, selection: true });
+        canvas.setWidth(w);
+        canvas.setHeight(h);
+        canvas.setBackgroundColor('#ffffff', canvas.renderAll.bind(canvas));
+        
+        canvas.on('selection:created', (e) => showFloatingToolbar(e.selected[0]));
+        canvas.on('selection:updated', (e) => showFloatingToolbar(e.selected[0]));
+        canvas.on('selection:cleared', () => hideFloatingToolbar());
+        canvas.on('object:modified', () => autoSave());
+        
+        showToast(`Canvas ready: ${w}x${h}`, 'success');
+    }
+
+    // ==================== SIZE SYSTEM ====================
+    function setSize(w, h) {
+        canvas.setWidth(w);
+        canvas.setHeight(h);
+        canvas.renderAll();
+        autoSave();
+        showToast(`Size: ${w}x${h}`);
+    }
+    
+    function renderSizePanel() {
+        const panel = document.getElementById('panelContent');
+        panel.innerHTML = `
+            <div class="panel-section">
+                <div class="panel-title">Canvas Presets</div>
+                <div class="preset-grid">
+                    ${Object.entries(sizePresets).map(([name, dims]) => `<div class="preset-item" data-w="${dims.w}" data-h="${dims.h}">${name}</div>`).join('')}
+                </div>
+            </div>
+            <div class="panel-section">
+                <div class="panel-title">Custom Size</div>
+                <input type="number" id="customW" placeholder="Width" value="${canvas.width}">
+                <input type="number" id="customH" placeholder="Height" value="${canvas.height}">
+                <button class="btn" id="applySizeBtn">Apply Size</button>
+            </div>
+        `;
+        
+        document.querySelectorAll('.preset-item[data-w]').forEach(el => {
+            el.addEventListener('click', () => setSize(parseInt(el.dataset.w), parseInt(el.dataset.h)));
+        });
+        document.getElementById('applySizeBtn')?.addEventListener('click', () => {
+            const w = parseInt(document.getElementById('customW').value);
+            const h = parseInt(document.getElementById('customH').value);
+            if (w && h) setSize(w, h);
+        });
+    }
+
+    // ==================== TEXT SYSTEM ====================
+    function addText() {
+        const text = new fabric.IText('Edit your text', {
+            left: canvas.width/2 - 100, top: canvas.height/2 - 40,
+            fontSize: 60, fontFamily: 'Inter', fill: '#000000', hasControls: true
+        });
+        canvas.add(text);
+        canvas.setActiveObject(text);
+        canvas.renderAll();
+        autoSave();
+        showToast('Text added');
+        renderTextPanel(); // Refresh panel to bind new object
+    }
+    
+    function renderTextPanel() {
+        const obj = canvas.getActiveObject();
+        const panel = document.getElementById('panelContent');
+        
+        panel.innerHTML = `
+            <div class="panel-section">
+                <button class="btn" id="addTextBtn"><i class="fas fa-plus"></i> Add New Text</button>
+            </div>
+            ${obj && (obj.isType('text') || obj.isType('i-text')) ? `
+            <div class="panel-section">
+                <div class="panel-title">Edit Text</div>
+                <input type="text" id="textContent" value="${obj.text.replace(/"/g, '&quot;')}" placeholder="Text content">
+            </div>
+            <div class="panel-section">
+                <div class="panel-title">Typography</div>
+                <select id="fontFamily">${fonts.map(f => `<option value="${f}" ${obj.fontFamily === f ? 'selected' : ''}>${f}</option>`).join('')}</select>
+                <label>Size: <span id="fontSizeVal">${obj.fontSize}</span>px</label>
+                <input type="range" id="fontSize" min="10" max="300" value="${obj.fontSize}">
+                <label>Color</label>
+                <input type="color" id="textColor" value="${obj.fill}">
+                <label>Opacity: <span id="textOpacityVal">${Math.round((obj.opacity || 1) * 100)}</span>%</label>
+                <input type="range" id="textOpacity" min="0" max="1" step="0.01" value="${obj.opacity || 1}">
+            </div>
+            <div class="panel-section">
+                <div class="panel-title">Style</div>
+                <div class="preset-grid">
+                    <div class="preset-item" id="boldBtn" style="${obj.fontWeight === 'bold' ? 'background:#667eea' : ''}"><b>Bold</b></div>
+                    <div class="preset-item" id="italicBtn" style="${obj.fontStyle === 'italic' ? 'background:#667eea' : ''}"><i>Italic</i></div>
+                    <div class="preset-item" id="underlineBtn" style="${obj.underline ? 'background:#667eea' : ''}"><u>Underline</u></div>
+                </div>
+            </div>
+            <div class="panel-section">
+                <div class="panel-title">Text Effects</div>
+                <div class="preset-grid">
+                    <div class="preset-item" id="gradientText">🌈 Gradient</div>
+                    <div class="preset-item" id="neonText">⚡ Neon</div>
+                    <div class="preset-item" id="goldText">✨ Gold</div>
+                    <div class="preset-item" id="shadowText">🌑 Shadow</div>
+                </div>
+            </div>
+            ` : '<div class="panel-section">Select a text object to edit</div>'}
+        `;
+        
+        document.getElementById('addTextBtn')?.addEventListener('click', addText);
+        
+        if (obj && (obj.isType('text') || obj.isType('i-text'))) {
+            document.getElementById('textContent')?.addEventListener('input', (e) => { obj.set('text', e.target.value); canvas.renderAll(); autoSave(); });
+            document.getElementById('fontFamily')?.addEventListener('change', (e) => { obj.set('fontFamily', e.target.value); canvas.renderAll(); autoSave(); });
+            document.getElementById('fontSize')?.addEventListener('input', (e) => { obj.set('fontSize', parseInt(e.target.value)); document.getElementById('fontSizeVal').innerText = e.target.value; canvas.renderAll(); autoSave(); });
+            document.getElementById('textColor')?.addEventListener('input', (e) => { obj.set('fill', e.target.value); canvas.renderAll(); autoSave(); });
+            document.getElementById('textOpacity')?.addEventListener('input', (e) => { obj.set('opacity', parseFloat(e.target.value)); document.getElementById('textOpacityVal').innerText = Math.round(parseFloat(e.target.value)*100); canvas.renderAll(); autoSave(); });
+            document.getElementById('boldBtn')?.addEventListener('click', () => { obj.set('fontWeight', obj.fontWeight === 'bold' ? 'normal' : 'bold'); renderTextPanel(); });
+            document.getElementById('italicBtn')?.addEventListener('click', () => { obj.set('fontStyle', obj.fontStyle === 'italic' ? 'normal' : 'italic'); renderTextPanel(); });
+            document.getElementById('underlineBtn')?.addEventListener('click', () => { obj.set('underline', !obj.underline); renderTextPanel(); });
+            document.getElementById('gradientText')?.addEventListener('click', () => {
+                obj.set('fill', new fabric.Gradient({ type: 'linear', coords: { x1: 0, y1: 0, x2: obj.width || 200, y2: 0 }, colorStops: [{ offset: 0, color: '#667eea' }, { offset: 1, color: '#764ba2' }] }));
+                canvas.renderAll(); autoSave();
+            });
+            document.getElementById('neonText')?.addEventListener('click', () => {
+                obj.set('shadow', { color: '#00ffff', blur: 20, offsetX: 0, offsetY: 0 });
+                obj.set('fill', '#00ffff');
+                canvas.renderAll(); autoSave();
+            });
+            document.getElementById('goldText')?.addEventListener('click', () => {
+                obj.set('fill', new fabric.Gradient({ type: 'linear', coords: { x1: 0, y1: 0, x2: obj.width || 200, y2: 0 }, colorStops: [{ offset: 0, color: '#ffd700' }, { offset: 0.5, color: '#ff8c00' }, { offset: 1, color: '#ffd700' }] }));
+                canvas.renderAll(); autoSave();
+            });
+            document.getElementById('shadowText')?.addEventListener('click', () => {
+                obj.set('shadow', { color: '#000000', blur: 10, offsetX: 5, offsetY: 5 });
+                canvas.renderAll(); autoSave();
+            });
+        }
+    }
+
+    // ==================== IMAGE SYSTEM ====================
+    function uploadImage() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = (e) => {
+            const reader = new FileReader();
+            reader.onload = (f) => {
+                fabric.Image.fromURL(f.target.result, (img) => {
+                    img.scaleToWidth(400);
+                    canvas.add(img);
+                    canvas.setActiveObject(img);
+                    canvas.renderAll();
+                    autoSave();
+                    showToast('Image added');
+                    renderImagePanel();
+                });
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        };
+        input.click();
+    }
+    
+    function renderImagePanel() {
+        const obj = canvas.getActiveObject();
+        const panel = document.getElementById('panelContent');
+        
+        panel.innerHTML = `
+            <div class="panel-section">
+                <button class="btn" id="uploadImgBtn"><i class="fas fa-upload"></i> Upload Image</button>
+            </div>
+            ${obj && obj.type === 'image' ? `
+            <div class="panel-section">
+                <div class="panel-title">Adjustments</div>
+                <label>Opacity: <span id="imgOpacityVal">${Math.round((obj.opacity || 1) * 100)}</span>%</label>
+                <input type="range" id="imgOpacity" min="0" max="1" step="0.01" value="${obj.opacity || 1}">
+                <label>Blur: <span id="imgBlurVal">0</span>px</label>
+                <input type="range" id="imgBlur" min="0" max="20" value="0">
+                <div class="preset-grid">
+                    <div class="preset-item" id="bwFilter">⚫ Black & White</div>
+                    <div class="preset-item" id="vintageFilter">📷 Vintage</div>
+                    <div class="preset-item" id="resetFilter">🔄 Reset</div>
+                </div>
+            </div>
+            <div class="panel-section">
+                <div class="panel-title">Transform</div>
+                <div class="preset-grid">
+                    <div class="preset-item" id="flipXBtn">↔ Flip H</div>
+                    <div class="preset-item" id="flipYBtn">↕ Flip V</div>
+                </div>
+            </div>
+            ` : '<div class="panel-section">Select an image to edit</div>'}
+        `;
+        
+        document.getElementById('uploadImgBtn')?.addEventListener('click', uploadImage);
+        
+        if (obj && obj.type === 'image') {
+            document.getElementById('imgOpacity')?.addEventListener('input', (e) => {
+                obj.set('opacity', parseFloat(e.target.value));
+                document.getElementById('imgOpacityVal').innerText = Math.round(parseFloat(e.target.value)*100);
+                canvas.renderAll();
+                autoSave();
+            });
+            document.getElementById('imgBlur')?.addEventListener('input', (e) => {
+                const blur = parseInt(e.target.value);
+                document.getElementById('imgBlurVal').innerText = blur;
+                obj.filters = [new fabric.Image.filters.Blur({ blur: blur / 10 })];
+                obj.applyFilters();
+                canvas.renderAll();
+                autoSave();
+            });
+            document.getElementById('bwFilter')?.addEventListener('click', () => {
+                obj.filters = [new fabric.Image.filters.Grayscale()];
+                obj.applyFilters();
+                canvas.renderAll();
+                autoSave();
+            });
+            document.getElementById('vintageFilter')?.addEventListener('click', () => {
+                obj.filters = [new fabric.Image.filters.Sepia()];
+                obj.applyFilters();
+                canvas.renderAll();
+                autoSave();
+            });
+            document.getElementById('resetFilter')?.addEventListener('click', () => {
+                obj.filters = [];
+                obj.applyFilters();
+                canvas.renderAll();
+                autoSave();
+            });
+            document.getElementById('flipXBtn')?.addEventListener('click', () => {
+                obj.set('flipX', !obj.flipX);
+                canvas.renderAll();
+                autoSave();
+            });
+            document.getElementById('flipYBtn')?.addEventListener('click', () => {
+                obj.set('flipY', !obj.flipY);
+                canvas.renderAll();
+                autoSave();
+            });
+        }
+    }
+
+    // ==================== SHAPE SYSTEM ====================
+    function addShape(type) {
+        let shape;
+        const left = canvas.width/2 - 75;
+        const top = canvas.height/2 - 75;
+        
+        switch(type) {
+            case 'rect':
+                shape = new fabric.Rect({ width: 150, height: 150, fill: '#667eea', rx: 0, left, top });
+                break;
+            case 'rounded':
+                shape = new fabric.Rect({ width: 150, height: 150, fill: '#667eea', rx: 20, ry: 20, left, top });
+                break;
+            case 'circle':
+                shape = new fabric.Circle({ radius: 75, fill: '#667eea', left, top });
+                break;
+            case 'triangle':
+                shape = new fabric.Triangle({ width: 150, height: 150, fill: '#667eea', left, top });
+                break;
+            case 'star':
+                const points = [];
+                for(let i = 0; i < 10; i++) {
+                    const angle = (Math.PI * 2 * i) / 10;
+                    const r = i % 2 === 0 ? 75 : 35;
+                    points.push({ x: r * Math.sin(angle), y: -r * Math.cos(angle) });
+                }
+                shape = new fabric.Polygon(points, { fill: '#667eea', left, top });
+                break;
+            default:
+                shape = new fabric.Rect({ width: 150, height: 150, fill: '#667eea', left, top });
+        }
+        canvas.add(shape);
+        canvas.setActiveObject(shape);
+        canvas.renderAll();
+        autoSave();
+        showToast(`${type} shape added`);
+        renderShapePanel();
+    }
+    
+    function renderShapePanel() {
+        const obj = canvas.getActiveObject();
+        const panel = document.getElementById('panelContent');
+        
+        panel.innerHTML = `
+            <div class="panel-section">
+                <div class="panel-title">Add Shapes</div>
+                <div class="preset-grid">
+                    <div class="preset-item" data-shape="rect">⬛ Rectangle</div>
+                    <div class="preset-item" data-shape="rounded">🔲 Rounded</div>
+                    <div class="preset-item" data-shape="circle">⚪ Circle</div>
+                    <div class="preset-item" data-shape="triangle">🔺 Triangle</div>
+                    <div class="preset-item" data-shape="star">⭐ Star</div>
+                </div>
+            </div>
+            ${obj && (obj.type === 'rect' || obj.type === 'circle' || obj.type === 'triangle' || obj.type === 'polygon') ? `
+            <div class="panel-section">
+                <div class="panel-title">Shape Style</div>
+                <label>Fill Color</label>
+                <input type="color" id="shapeFill" value="${obj.fill || '#667eea'}">
+                <label>Opacity: <span id="shapeOpacityVal">${Math.round((obj.opacity || 1) * 100)}</span>%</label>
+                <input type="range" id="shapeOpacity" min="0" max="1" step="0.01" value="${obj.opacity || 1}">
+                <label>Border Color</label>
+                <input type="color" id="shapeBorder" value="${obj.stroke || '#000000'}">
+                <label>Border Width: <span id="shapeBorderVal">${obj.strokeWidth || 0}</span>px</label>
+                <input type="range" id="shapeBorderWidth" min="0" max="10" value="${obj.strokeWidth || 0}">
+            </div>
+            ` : '<div class="panel-section">Select a shape to edit</div>'}
+        `;
+        
+        document.querySelectorAll('[data-shape]').forEach(el => {
+            el.addEventListener('click', () => addShape(el.dataset.shape));
+        });
+        
+        if (obj && (obj.type === 'rect' || obj.type === 'circle' || obj.type === 'triangle' || obj.type === 'polygon')) {
+            document.getElementById('shapeFill')?.addEventListener('input', (e) => {
+                obj.set('fill', e.target.value);
+                canvas.renderAll();
+                autoSave();
+            });
+            document.getElementById('shapeOpacity')?.addEventListener('input', (e) => {
+                obj.set('opacity', parseFloat(e.target.value));
+                document.getElementById('shapeOpacityVal').innerText = Math.round(parseFloat(e.target.value)*100);
+                canvas.renderAll();
+                autoSave();
+            });
+            document.getElementById('shapeBorder')?.addEventListener('input', (e) => {
+                obj.set('stroke', e.target.value);
+                canvas.renderAll();
+                autoSave();
+            });
+            document.getElementById('shapeBorderWidth')?.addEventListener('input', (e) => {
+                obj.set('strokeWidth', parseInt(e.target.value));
+                document.getElementById('shapeBorderVal').innerText = e.target.value;
+                canvas.renderAll();
+                autoSave();
+            });
+        }
+    }
+
+    // ==================== BADGE SYSTEM ====================
+    function addBadge(badgeData) {
+        const text = new fabric.Text(badgeData.text, {
+            left: canvas.width/2 - 100, top: canvas.height/2 - 30,
+            fontSize: 48, fontWeight: 'bold', fill: badgeData.color,
+            backgroundColor: badgeData.bg, padding: 20, hasControls: true
+        });
+        canvas.add(text);
+        canvas.setActiveObject(text);
+        canvas.renderAll();
+        autoSave();
+        showToast(`Badge: ${badgeData.text}`);
+    }
+    
+    function renderBadgePanel() {
+        const panel = document.getElementById('panelContent');
+        panel.innerHTML = `
+            <div class="panel-section">
+                <div class="panel-title">Premium Badges</div>
+                <div class="preset-grid">
+                    ${badgeLibrary.map(b => `<div class="preset-item" data-badge='${JSON.stringify(b)}'>${b.text}</div>`).join('')}
+                </div>
+            </div>
+            <div class="panel-section">
+                <div class="panel-title">Custom Badge</div>
+                <input type="text" id="customText" placeholder="Enter text">
+                <label>Text Color</label>
+                <input type="color" id="customColor" value="#ffffff">
+                <label>Background</label>
+                <input type="color" id="customBg" value="#667eea">
+                <button class="btn" id="createBadgeBtn">Create Badge</button>
+            </div>
+        `;
+        
+        document.querySelectorAll('[data-badge]').forEach(el => {
+            el.addEventListener('click', () => addBadge(JSON.parse(el.dataset.badge)));
+        });
+        document.getElementById('createBadgeBtn')?.addEventListener('click', () => {
+            const text = document.getElementById('customText').value || 'CUSTOM';
+            const color = document.getElementById('customColor').value;
+            const bg = document.getElementById('customBg').value;
+            addBadge({ text, color, bg });
+        });
+    }
+
+    // ==================== SHADOW SYSTEM ====================
+    function renderShadowPanel() {
+        const obj = canvas.getActiveObject();
+        const currentShadow = obj ? obj.shadow : null;
+        const shadowColor = currentShadow ? (currentShadow.color || '#000000') : '#000000';
+        const shadowBlur = currentShadow ? (currentShadow.blur || 10) : 10;
+        const shadowX = currentShadow ? (currentShadow.offsetX || 5) : 5;
+        const shadowY = currentShadow ? (currentShadow.offsetY || 5) : 5;
+        
+        const panel = document.getElementById('panelContent');
+        panel.innerHTML = `
+            <div class="panel-section">
+                <div class="panel-title">Shadow Settings</div>
+                ${obj ? `
+                <label>Shadow Color</label>
+                <input type="color" id="shadowColor" value="${shadowColor}">
+                <label>Blur: <span id="shadowBlurVal">${shadowBlur}</span>px</label>
+                <input type="range" id="shadowBlur" min="0" max="50" value="${shadowBlur}">
+                <label>X Offset: <span id="shadowXVal">${shadowX}</span>px</label>
+                <input type="range" id="shadowX" min="-50" max="50" value="${shadowX}">
+                <label>Y Offset: <span id="shadowYVal">${shadowY}</span>px</label>
+                <input type="range" id="shadowY" min="-50" max="50" value="${shadowY}">
+                <button class="btn" id="removeShadowBtn" style="margin-top: 10px; background:#ef4444;">Remove Shadow</button>
+                <div class="preset-grid" style="margin-top: 15px;">
+                    <div class="preset-item" id="glowEffect">✨ Soft Glow</div>
+                    <div class="preset-item" id="neonEffect">⚡ Neon Glow</div>
+                    <div class="preset-item" id="hardShadow">🎯 Hard Shadow</div>
+                </div>
+                ` : '<div class="panel-section">Select an object to add shadow</div>'}
+            </div>
+        `;
+        
+        if (obj) {
+            document.getElementById('shadowColor')?.addEventListener('input', (e) => {
+                obj.set('shadow', { color: e.target.value, blur: shadowBlur, offsetX: shadowX, offsetY: shadowY });
+                canvas.renderAll();
+                autoSave();
+            });
+            document.getElementById('shadowBlur')?.addEventListener('input', (e) => {
+                const blur = parseInt(e.target.value);
+                document.getElementById('shadowBlurVal').innerText = blur;
+                obj.set('shadow', { color: shadowColor, blur: blur, offsetX: shadowX, offsetY: shadowY });
+                canvas.renderAll();
+                autoSave();
+            });
+            document.getElementById('shadowX')?.addEventListener('input', (e) => {
+                const x = parseInt(e.target.value);
+                document.getElementById('shadowXVal').innerText = x;
+                obj.set('shadow', { color: shadowColor, blur: shadowBlur, offsetX: x, offsetY: shadowY });
+                canvas.renderAll();
+                autoSave();
+            });
+            document.getElementById('shadowY')?.addEventListener('input', (e) => {
+                const y = parseInt(e.target.value);
+                document.getElementById('shadowYVal').innerText = y;
+                obj.set('shadow', { color: shadowColor, blur: shadowBlur, offsetX: shadowX, offsetY: y });
+                canvas.renderAll();
+                autoSave();
+            });
+            document.getElementById('removeShadowBtn')?.addEventListener('click', () => {
+                obj.set('shadow', null);
+                canvas.renderAll();
+                autoSave();
+                renderShadowPanel();
+            });
+            document.getElementById('glowEffect')?.addEventListener('click', () => {
+                obj.set('shadow', { color: '#a78bfa', blur: 20, offsetX: 0, offsetY: 0 });
+                canvas.renderAll();
+                autoSave();
+            });
+            document.getElementById('neonEffect')?.addEventListener('click', () => {
+                obj.set('shadow', { color: '#00ffff', blur: 25, offsetX: 0, offsetY: 0 });
+                canvas.renderAll();
+                autoSave();
+            });
+            document.getElementById('hardShadow')?.addEventListener('click', () => {
+                obj.set('shadow', { color: '#000000', blur: 2, offsetX: 8, offsetY: 8 });
+                canvas.renderAll();
+                autoSave();
+            });
+        }
+    }
+
+    // ==================== LAYER SYSTEM ====================
+    function renderLayersPanel() {
+        const objects = canvas.getObjects();
+        const panel = document.getElementById('panelContent');
+        
+        panel.innerHTML = `
+            <div class="panel-section">
+                <div class="panel-title">Layers (${objects.length})</div>
+                <div id="layersList"></div>
+            </div>
+        `;
+        
+        const layersDiv = document.getElementById('layersList');
+        for (let i = objects.length - 1; i >= 0; i--) {
+            const obj = objects[i];
+            const layer = document.createElement('div');
+            layer.className = 'layer-item';
+            let icon = 'fa-shapes';
+            if (obj.type === 'text' || obj.type === 'i-text') icon = 'fa-font';
+            else if (obj.type === 'image') icon = 'fa-image';
+            else if (obj.type === 'rect' || obj.type === 'circle') icon = 'fa-square';
+            
+            layer.innerHTML = `
+                <span><i class="fas ${icon}"></i> ${obj.type || 'Object'} ${i + 1}</span>
+                <button class="btn" data-idx="${i}" style="padding: 4px 8px; font-size: 0.7rem;">Select</button>
+            `;
+            layersDiv.appendChild(layer);
+        }
+        
+        document.querySelectorAll('.layer-item button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = parseInt(e.target.dataset.idx);
+                canvas.setActiveObject(canvas.getObjects()[idx]);
+                canvas.renderAll();
+                showToast(`Layer ${idx + 1} selected`);
+            });
+        });
+    }
+
+    // ==================== FLOATING TOOLBAR ====================
+    function showFloatingToolbar(obj) {
+        hideFloatingToolbar();
+        if (!obj) return;
+        
+        floatingBar = document.createElement('div');
+        floatingBar.className = 'floating-toolbar';
+        floatingBar.innerHTML = `
+            <button id="ftDup"><i class="fas fa-copy"></i></button>
+            <button id="ftDel"><i class="fas fa-trash"></i></button>
+            <button id="ftFwd"><i class="fas fa-arrow-up"></i></button>
+            <button id="ftBwd"><i class="fas fa-arrow-down"></i></button>
+            <button id="ftLock"><i class="fas fa-lock"></i></button>
+        `;
+        document.body.appendChild(floatingBar);
+        
+        const updatePosition = () => {
+            const bounds = obj.getBoundingRect();
+            const zoom = canvas.getZoom();
+            const viewport = canvas.viewportTransform;
+            const left = (bounds.left + bounds.width/2) * zoom + (viewport ? viewport[4] : 0) + 200;
+            const top = (bounds.top - 70) * zoom + (viewport ? viewport[5] : 0) + 100;
+            floatingBar.style.left = `${Math.max(10, left)}px`;
+            floatingBar.style.top = `${Math.max(10, top)}px`;
+        };
+        updatePosition();
+        
+        document.getElementById('ftDel')?.addEventListener('click', () => {
+            canvas.remove(obj);
+            hideFloatingToolbar();
+            canvas.renderAll();
+            autoSave();
+            showToast('Deleted');
+        });
+        document.getElementById('ftDup')?.addEventListener('click', () => {
+            obj.clone((cloned) => {
+                cloned.set({ left: obj.left + 30, top: obj.top + 30 });
+                canvas.add(cloned);
+                canvas.setActiveObject(cloned);
+                canvas.renderAll();
+                autoSave();
+                showToast('Duplicated');
+            });
+        });
+        document.getElementById('ftFwd')?.addEventListener('click', () => {
+            canvas.bringForward(obj);
+            canvas.renderAll();
+        });
+        document.getElementById('ftBwd')?.addEventListener('click', () => {
+            canvas.sendBackwards(obj);
+            canvas.renderAll();
+        });
+        document.getElementById('ftLock')?.addEventListener('click', () => {
+            obj.set('lockMovement', !obj.lockMovement);
+            canvas.renderAll();
+            showToast(obj.lockMovement ? 'Locked' : 'Unlocked');
+        });
+    }
+    
+    function hideFloatingToolbar() {
+        if (floatingBar) floatingBar.remove();
+        floatingBar = null;
+    }
+
+    // ==================== MAIN INIT ====================
+    function switchTool(tool) {
+        if (window.innerWidth <= 768) {
+            document.getElementById('propertiesPanel').classList.add('open');
+        }
+        
+        switch(tool) {
+            case 'size': renderSizePanel(); break;
+            case 'text': renderTextPanel(); break;
+            case 'image': renderImagePanel(); break;
+            case 'shape': renderShapePanel(); break;
+            case 'badge': renderBadgePanel(); break;
+            case 'shadow': renderShadowPanel(); break;
+            case 'layers': renderLayersPanel(); break;
+            default: renderSizePanel();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        initCanvas(1000, 800);
+        renderSizePanel();
+        
+        document.querySelectorAll('[data-tool]').forEach(el => {
+            el.addEventListener('click', () => switchTool(el.dataset.tool));
+        });
+        
+        document.getElementById('newBtn')?.addEventListener('click', () => {
+            if (confirm('Create new design? Current work will be lost.')) {
+                canvas.clear();
+                canvas.setBackgroundColor('#ffffff', canvas.renderAll.bind(canvas));
+                setSize(1000, 800);
+                showToast('New project created');
+            }
+        });
+        
+        document.getElementById('saveBtn')?.addEventListener('click', () => {
+            const data = { canvasJSON: canvas.toJSON(), width: canvas.width, height: canvas.height };
+            localStorage.setItem('poster_maker_saved', JSON.stringify(data));
+            showToast('Project saved!', 'success');
+        });
+        
+        document.getElementById('exportPngBtn')?.addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.download = `poster-${Date.now()}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            showToast('Exported as PNG', 'success');
+        });
+        
+        // Restore auto-save
+        const autoSaved = localStorage.getItem('poster_maker_auto');
+        if (autoSaved) {
+            const data = JSON.parse(autoSaved);
+            setTimeout(() => {
+                canvas.loadFromJSON(data.canvasJSON, () => {
+                    canvas.renderAll();
+                    showToast('Auto-save restored', 'success');
+                });
+            }, 100);
+        }
+        
+        showToast('Poster Maker Pro Ready! 🎨 Select a tool', 'success');
+    });
+</script>
+</body>
 </html>
